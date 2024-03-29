@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar"> <!-- Спросить у ГПТ -->
+        <!-- Customize your theme here. -->
+    </style>
+
+    <!-- Стиль для EditText -->
+    <style name="AuthEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:background">@drawable/auth_edit_text_style</item>
+        <item name="android:textColor">@color/mainBlack</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!-- Стиль для Button -->
+    <style name="BlueButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">200dp</item> <!-- Задаем ширину -->
+        <item name="android:layout_height">60dp</item> <!-- Задаем высоту -->
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/mainWhite</item>
+        <item name="android:textSize">18sp</item>
+        <!-- <item name="android:fontFamily"></item>  ДОБАВИТЬ ШРИФТ ДЛЯ КНОПКИ -->
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/default_blue_button_style</item> <!-- Ссылка на фон -->
+        <!-- Другие параметры стиля, если нужно -->
+    </style>
+
+    <!-- Стиль для TextView (registration/auth) -->
+    <style name="AuthTextViewStyle" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/mainBlack</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!-- Стиль для Spinner(registration) -->
+<!--    <style name="SpinnerStyle">-->
+<!--        <item name="android:textAppearance">@style/AuthEditTextStyle</item>-->
+<!--    </style>-->
+
+</resources>

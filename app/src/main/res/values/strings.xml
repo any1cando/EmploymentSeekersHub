@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">EmploymentSeekersHub</string>
+    <string name="my_ip">http://192.168.56.1:8081/api/</string>
+</resources>

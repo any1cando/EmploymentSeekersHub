@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainWhite"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <ImageButton
+        android:id="@+id/backFromRegistrationToEnterButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/back_to_left_blue_arrow_24"
+        android:background="@color/mainWhite"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/startHelloUserRegistrationTextView"
+        style="@style/AuthTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Create an account"
+        android:textSize="25dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <EditText
+        android:id="@+id/firstNameUserRegistrationEditText"
+        style="@style/AuthEditTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:ems="14"
+        android:inputType="text"
+        android:text=""
+        android:hint="Enter your firstname"
+        app:layout_constraintTop_toBottomOf="@id/startHelloUserRegistrationTextView"
+        app:layout_constraintStart_toStartOf="@id/startHelloUserRegistrationTextView"
+        app:layout_constraintEnd_toEndOf="@id/startHelloUserRegistrationTextView"/>
+
+    <EditText
+        android:id="@+id/lastNameUserRegistrationEditText"
+        style="@style/AuthEditTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:ems="14"
+        android:inputType="text"
+        android:text=""
+        android:hint="Enter your lastname"
+        app:layout_constraintStart_toStartOf="@id/startHelloUserRegistrationTextView"
+        app:layout_constraintEnd_toEndOf="@id/startHelloUserRegistrationTextView"
+        app:layout_constraintTop_toBottomOf="@id/firstNameUserRegistrationEditText"
+        />
+
+    <EditText
+        android:id="@+id/emailUserRegistrationEditText"
+        style="@style/AuthEditTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:ems="14"
+        android:inputType="text"
+        android:text=""
+        android:hint="Enter your email"
+        app:layout_constraintStart_toStartOf="@id/startHelloUserRegistrationTextView"
+        app:layout_constraintEnd_toEndOf="@id/startHelloUserRegistrationTextView"
+        app:layout_constraintTop_toBottomOf="@id/lastNameUserRegistrationEditText"
+        />
+
+    <EditText
+        android:id="@+id/passwordUserRegistrationEditText"
+        style="@style/AuthEditTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:ems="14"
+        android:inputType="text"
+        android:text=""
+        android:hint="Enter your password"
+        app:layout_constraintStart_toStartOf="@id/startHelloUserRegistrationTextView"
+        app:layout_constraintEnd_toEndOf="@id/startHelloUserRegistrationTextView"
+        app:layout_constraintTop_toBottomOf="@id/emailUserRegistrationEditText"
+        />
+
+    <Spinner
+        android:id="@+id/registrationSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        app:layout_constraintTop_toBottomOf="@id/passwordUserRegistrationEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <Button
+        android:id="@+id/confirmRegistrationButton"
+        style="@style/BlueButtonStyle"
+        android:layout_marginTop="70dp"
+        android:layout_marginBottom="70dp"
+        android:text="Sign up"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
