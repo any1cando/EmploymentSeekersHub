@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -28,14 +29,21 @@ class RegistrationActivity : AppCompatActivity() {
     private lateinit var lastName: EditText
     private lateinit var userLogin: EditText
     private lateinit var userPassword: EditText
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(R.string.my_ip.toString())
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val authService = retrofit.create(AuthService::class.java)
     private lateinit var spinner: Spinner
 
+    private var userHasInteracted = false
+
+    override fun onUserInteraction() {
+        super.onUserInteraction()
+        userHasInteracted = true
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(resources.getString(R.string.my_ip))
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val authService = retrofit.create(AuthService::class.java)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registration)
 
@@ -44,9 +52,10 @@ class RegistrationActivity : AppCompatActivity() {
             findViewById<ImageButton>(R.id.backFromRegistrationToEnterButton)
 
         // Установка адаптера на спиннер и его первоначальная настройка
-        val spinnerRegistrationChoices = listOf(
-            RegistrationPersonStatus("Part of a team"),
-            RegistrationPersonStatus("Solo creator")
+        val spinnerRegistrationChoices = mutableListOf(
+            RegistrationPersonStatus("Choose a role:"),
+            RegistrationPersonStatus(resources.getString(R.string.part_of_a_team)),
+            RegistrationPersonStatus(resources.getString(R.string.solo_creator))
         )
         val adapterSpinner = RegistrationPersonStatusAdapter(
             this,
@@ -58,23 +67,30 @@ class RegistrationActivity : AppCompatActivity() {
         spinner.adapter = adapterSpinner
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View,
-                position: Int,
-                id: Long
-            ) {
-                userRoleItemElement =
-                    parent.getItemAtPosition(position) as RegistrationPersonStatus
-                userRoleRequest = if (userRoleItemElement.equals("Part of a team")) {
-                    "APPLICANT"
-                } else {
-                    "COMPANY_OWNER"
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                if (!userHasInteracted) {
+                    // Если это вызов при инициализации, не предпринимаем действий
+                    return
+                }
+
+                // Обновляем выбранный элемент и его запрос
+                userRoleItemElement = parent.getItemAtPosition(position) as RegistrationPersonStatus
+                userRoleRequest = when (userRoleItemElement.status) {
+                    resources.getString(R.string.part_of_a_team) -> "APPLICANT"
+                    resources.getString(R.string.solo_creator) -> "COMPANY_OWNER"
+                    else -> "NOTHING" // В случае, если выбрана заглушка, можно установить пустую строку или другое значение по умолчанию
+                }
+
+                // Удаляем заглушку "Choose a role:" после первого выбора пользователя
+                if (spinnerRegistrationChoices[0].status == "Choose a role:") {
+                    spinnerRegistrationChoices.removeAt(0) // Удаляем заглушку
+                    (parent.adapter as ArrayAdapter<*>).notifyDataSetChanged() // Обновляем адаптер
+                    spinner.setSelection(position - 1) // Устанавливаем выбранный элемент, учитывая удаление заглушки
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Ничего не делать, если ничего не выбрано
+//                (spinner.adapter as RegistrationPersonStatusAdapter).isSelectionMade = false
             }
         }
 
@@ -102,7 +118,7 @@ class RegistrationActivity : AppCompatActivity() {
 
         backToEnterButton.setOnClickListener {  // Обработчик при возвращении без регистрации
             val intentToEnter = Intent(this, EnterActivity::class.java)
-            print("Вернулся без регистрации")
+            Log.i("Status:", "Вернулся без регистрации")
             startActivity(intentToEnter)
         }
 
@@ -145,7 +161,7 @@ class RegistrationActivity : AppCompatActivity() {
                 override fun onResponse(
                     call: Call<UserTokenResponse>,
                     response: Response<UserTokenResponse>) {
-                    Log.i("onResponse", "ВСЁ КОРРЕКТНО")
+                    Log.i("Status:", "OnResponse is working")
                     if (response.isSuccessful) {
                         // Обработка успешного ответа
                         val userResponse = response.body()
@@ -173,8 +189,8 @@ class RegistrationActivity : AppCompatActivity() {
 
                 override fun onFailure(call: Call<UserTokenResponse>, t: Throwable) {
                     val error: String = t.message.toString()
-                    Log.i("onResponse", "ВСЁ ХУЕВО")
-                    Log.i("Error", t.message.toString())
+                    Log.i("Status:", "OnResponse's fail")
+                    Log.i("Error:", t.message.toString())
                 }
             })
     }

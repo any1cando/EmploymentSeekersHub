@@ -21,6 +21,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.regex.Pattern
+import kotlin.reflect.typeOf
 
 class EnterActivity : AppCompatActivity() {
     // private lateinit var buttonGoToRegistration: Button
@@ -28,19 +29,21 @@ class EnterActivity : AppCompatActivity() {
     private lateinit var userPassword: EditText
     private lateinit var textViewLinkGoToRegistration: TextView
     private lateinit var buttonGoToMain: Button
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(R.string.my_ip.toString())
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val authService = retrofit.create(AuthService::class.java)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_enter)
 
+        val retrofit = Retrofit.Builder()
+            .baseUrl(resources.getString(R.string.my_ip))
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val authService = retrofit.create(AuthService::class.java)
+
+        Log.i("StatusSpec", R.string.my_ip.toString())
         textViewLinkGoToRegistration = findViewById(R.id.registrationTextView)
-        val contentTextView = SpannableString("Зарегистрироваться!").apply {  // Настройка TextView как ссылки
+        val contentTextView = SpannableString("Sign up!").apply {  // Настройка TextView как ссылки
             setSpan(UnderlineSpan(), 0, length, 0)
         }
         textViewLinkGoToRegistration.text = contentTextView
@@ -70,26 +73,26 @@ class EnterActivity : AppCompatActivity() {
         val loginInfo = UserAuthorizationRequest(email = userLogin, password = userPassword)
         authService.performLogin(loginInfo).enqueue(object : Callback<UserTokenResponse> {
             override fun onResponse(call: Call<UserTokenResponse>, response: Response<UserTokenResponse>) {
-                Log.i("Зашел", "Работает onResponse")
+                Log.i("Status:", "onResponse is working")
                 if (response.isSuccessful) {
                     // Обработка успешного ответа
                     val userResponse = response.body()
                     val accessToken = userResponse?.accessToken
                     val refreshToken = userResponse?.refreshToken
                     // Используйте токен по своему усмотрению
-                    Log.i("OK refresh", refreshToken.toString())
-                    Log.i("OK access", accessToken.toString())
+                    Log.i("Correct refresh token:", refreshToken.toString())
+                    Log.i("Correct access token:", accessToken.toString())
                     val intentToMain = Intent(this@EnterActivity, MainActivity::class.java)  // !!!!!!Также добавить переход putExtra для двух токенов или SharedPreferences
                     startActivity(intentToMain)
                 } else {
                     when (response.code()) {
                         400 -> {
                             val errorBodyRequest = response.errorBody()?.string()
-                            Log.i("400 Ошибка", errorBodyRequest.toString())
+                            Log.i("Error 400", errorBodyRequest.toString())
                         }
                         else -> {
                             val errorBodyServer = response.errorBody()?.string()  // ошибки 500
-                            Log.i("500 Ошибка", errorBodyServer.toString())
+                            Log.i("Error 500", errorBodyServer.toString())
                         }
                     }
                     // Обработка ошибок, например, неправильные учетные данные
@@ -98,7 +101,7 @@ class EnterActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<UserTokenResponse>, t: Throwable) {
                 val error: String = t.message.toString()
-                Log.e("Error Fail", error)
+                Log.e("Error", error)
             }
         })
     }

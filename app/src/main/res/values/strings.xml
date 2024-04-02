@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">EmploymentSeekersHub</string>
     <string name="my_ip">http://192.168.56.1:8081/api/</string>
+<!--    http://192.168.56.1:8081/api-->
+    <string name="welcome_back">Welcome back!</string>
+    <string name="your_email">Your Email</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="your_password">Your password</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="no_account">No account?</string>
+    <string name="sign_up">Sign up!</string>
+    <string name="log_in">Log in</string>
+    <string name="create_an_account">Create an account</string>
+    <string name="enter_your_firstname">Enter your firstname</string>
+    <string name="enter_your_lastname">Enter your lastname</string>
+    <string name="part_of_a_team">Part of a team</string>
+    <string name="solo_creator">Solo Creator</string>
+    <string name="choose_prompt">Choose…</string>
 </resources>

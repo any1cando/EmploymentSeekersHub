@@ -13,8 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:text="Welcome back!"
-        android:textSize="25dp"
+        android:text="@string/welcome_back"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
-        android:text="Your Email"
+        android:text="@string/your_email"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@id/loginEditText"
         app:layout_constraintStart_toStartOf="@id/loginEditText"
@@ -41,12 +41,11 @@
         android:ems="14"
         android:inputType="text"
         android:text=""
-        android:hint="Enter your email"
+        android:hint="@string/enter_your_email"
         app:layout_constraintTop_toBottomOf="@id/startHelloTextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-
-        />
+        android:autofillHints="emailAddress" />
 
     <TextView
         android:id="@+id/yourPasswordTextView"
@@ -54,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
-        android:text="Your password"
+        android:text="@string/your_password"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@id/passwordEditText"
         app:layout_constraintBottom_toTopOf="@id/passwordEditText"
@@ -70,10 +69,11 @@
         android:ems="14"
         android:inputType="textPassword"
         android:text=""
-        android:hint="Enter your password"
+        android:hint="@string/enter_your_password"
         app:layout_constraintTop_toBottomOf="@id/loginEditText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:autofillHints="password" />
 
     <TextView
         android:id="@+id/helpRegistrationTextView"
@@ -81,11 +81,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="50dp"
-        android:text="Нет аккаунта?"
+        android:layout_marginEnd="90dp"
+        android:text="@string/no_account"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/passwordEditText"
+        app:layout_constraintEnd_toEndOf="parent"
         />
 
     <TextView
@@ -96,11 +97,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="50dp"
-        android:text="Зарегистрироваться!"
+        android:layout_marginStart="120dp"
+        android:text="@string/sign_up"
         android:textSize="17sp"
         android:textColor="@color/text_view_link_color_selector"
         app:layout_constraintTop_toBottomOf="@id/passwordEditText"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
 
@@ -117,7 +119,7 @@
         android:id="@+id/authorizationButton"
         style="@style/BlueButtonStyle"
         android:layout_marginBottom="70dp"
-        android:text="Log in"
+        android:text="@string/log_in"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
