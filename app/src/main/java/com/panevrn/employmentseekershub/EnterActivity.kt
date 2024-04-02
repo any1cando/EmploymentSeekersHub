@@ -24,6 +24,7 @@ import java.util.regex.Pattern
 import kotlin.reflect.typeOf
 
 class EnterActivity : AppCompatActivity() {
+    private lateinit var sessionManager: SessionManager
     // private lateinit var buttonGoToRegistration: Button
     private lateinit var userLogin: EditText
     private lateinit var userPassword: EditText
@@ -35,6 +36,7 @@ class EnterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_enter)
 
+        sessionManager = SessionManager(this)
         val retrofit = Retrofit.Builder()
             .baseUrl(resources.getString(R.string.my_ip))
             .addConverterFactory(GsonConverterFactory.create())
@@ -82,6 +84,9 @@ class EnterActivity : AppCompatActivity() {
                     // Используйте токен по своему усмотрению
                     Log.i("Correct refresh token:", refreshToken.toString())
                     Log.i("Correct access token:", accessToken.toString())
+
+                    sessionManager.saveAccessToken(accessToken)
+                    sessionManager.saveRefreshToken(refreshToken)
                     val intentToMain = Intent(this@EnterActivity, MainActivity::class.java)  // !!!!!!Также добавить переход putExtra для двух токенов или SharedPreferences
                     startActivity(intentToMain)
                 } else {

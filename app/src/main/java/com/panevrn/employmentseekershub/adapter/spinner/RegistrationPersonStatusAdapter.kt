@@ -1,7 +1,6 @@
-package com.panevrn.employmentseekershub.model.dto
+package com.panevrn.employmentseekershub.adapter.spinner
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.panevrn.employmentseekershub.R
+import com.panevrn.employmentseekershub.model.dto.RegistrationPersonStatus
 
 class RegistrationPersonStatusAdapter(context: Context, resource: Int, objects: List<RegistrationPersonStatus>): ArrayAdapter<RegistrationPersonStatus>(context, resource, objects) {
     // Метод 'getView' вызывается для каждого элемента в списке данных, когда адаптеру нужно создать новое представление (View) для отображения.

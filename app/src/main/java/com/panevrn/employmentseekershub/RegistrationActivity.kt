@@ -11,8 +11,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
+import com.panevrn.employmentseekershub.adapter.spinner.RegistrationPersonStatusAdapter
 import com.panevrn.employmentseekershub.model.dto.RegistrationPersonStatus
-import com.panevrn.employmentseekershub.model.dto.RegistrationPersonStatusAdapter
 import com.panevrn.employmentseekershub.model.dto.UserRegistrationRequest
 import com.panevrn.employmentseekershub.model.dto.UserTokenResponse
 import retrofit2.Call
@@ -21,8 +21,10 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.regex.Pattern
+import com.panevrn.employmentseekershub.SessionManager
 
 class RegistrationActivity : AppCompatActivity() {
+    private lateinit var sessionManager: SessionManager
     private lateinit var userRoleItemElement: RegistrationPersonStatus
     private lateinit var userRoleRequest: String
     private lateinit var firstName: EditText
@@ -145,33 +147,24 @@ class RegistrationActivity : AppCompatActivity() {
         userPassword: String,
         userRole: String
     ) {
-//        val firstName: String = findViewById<EditText>(R.id.firstNameUserRegistrationEditText).text.toString()
-//        val lastName: String = findViewById<EditText>(R.id.lastNameUserRegistrationEditText).text.toString()
-//        val userLogin: String = findViewById<EditText>(R.id.emailUserRegistrationEditText).text.toString()
-//        val userPassword: String = findViewById<EditText>(R.id.passwordUserRegistrationEditText).text.toString()
 
-        val registrationInfo = UserRegistrationRequest(
-            firstName = firstName,
-            lastName = lastName,
-            email = userLogin,
-            password = userPassword,
-            userRole = userRole
-        )
+        val registrationInfo = UserRegistrationRequest(firstName = firstName, lastName = lastName, email = userLogin,
+            password = userPassword, userRole = userRole)
+
         authService.performRegistration(registrationInfo).enqueue(object : Callback<UserTokenResponse> {
-                override fun onResponse(
-                    call: Call<UserTokenResponse>,
-                    response: Response<UserTokenResponse>) {
+                override fun onResponse(call: Call<UserTokenResponse>, response: Response<UserTokenResponse>) {
                     Log.i("Status:", "OnResponse is working")
                     if (response.isSuccessful) {
                         // Обработка успешного ответа
                         val userResponse = response.body()
                         val accessToken = userResponse?.accessToken
                         val refreshToken = userResponse?.refreshToken
+
+                        sessionManager.saveAccessToken(accessToken)
+                        sessionManager.saveRefreshToken(refreshToken)
                         // Используйте токен по своему усмотрению
-                        val intentToMain = Intent(
-                            this@RegistrationActivity,
-                            EnterActivity::class.java
-                        )  // !!!!!!Также добавить переход putExtra для двух токенов или SharedPreferences
+                        val intentToMain = Intent(this@RegistrationActivity, EnterActivity::class.java)
+                        // !!!!!!Также добавить переход putExtra для двух токенов или SharedPreferences
                         startActivity(intentToMain)
                     } else {
                         when (response.code()) {

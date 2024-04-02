@@ -5,6 +5,8 @@ import com.panevrn.employmentseekershub.model.dto.UserRegistrationRequest
 import com.panevrn.employmentseekershub.model.dto.UserTokenResponse
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface AuthService {
@@ -13,4 +15,7 @@ interface AuthService {
 
     @POST("auth/registration")  // Строка для ввода регистрации
     fun performRegistration(@Body registrationInfo: UserRegistrationRequest): Call<UserTokenResponse>
+
+    @GET("greet/hello")
+    fun performHello(@Header("Authorization") token: String): Call<String>
 }
