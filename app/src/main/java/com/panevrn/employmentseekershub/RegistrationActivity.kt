@@ -42,7 +42,7 @@ class RegistrationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val retrofit = Retrofit.Builder()
-            .baseUrl(resources.getString(R.string.my_ip))
+            .baseUrl(resources.getString(R.string.my_ip_home_network_5g))
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val authService = retrofit.create(AuthService::class.java)

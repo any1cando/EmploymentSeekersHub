@@ -34,9 +34,32 @@
         <item name="android:textSize">18sp</item>
     </style>
 
-    <!-- Стиль для Spinner(registration) -->
-<!--    <style name="SpinnerStyle">-->
-<!--        <item name="android:textAppearance">@style/AuthEditTextStyle</item>-->
-<!--    </style>-->
+
+    <!-- Стиль для SearchView (main) -->
+    <style name="CustomSearchViewStyleMain" parent="Widget.AppCompat.SearchView">
+        <!-- Фон для поля ввода -->
+        <item name="queryBackground">@color/blueActive</item>
+
+        <!-- Фон для всего SearchView -->
+        <item name="backgroundColor">@color/mainWhite</item>
+
+        <!-- Иконка поиска -->
+        <item name="searchIcon">@drawable/search_button</item>
+
+        <!-- Иконка закрытия -->
+<!--        <item name="closeIcon">@drawable/ic_close_custom</item>-->
+
+        <!-- Цвет текста подсказки -->
+        <item name="queryHint">@string/search_const</item>
+
+        <!-- Цвет текста ввода -->
+        <item name="android:textColor">@color/mainBlack</item>
+
+        <!-- Цвет текста подсказки -->
+        <item name="android:textColorHint">@color/gray</item>
+
+        <!-- Шрифт для текста -->
+<!--        <item name="android:fontFamily">@font/???</item>-->
+    </style>
 
 </resources>

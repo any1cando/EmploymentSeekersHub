@@ -25,7 +25,6 @@ import kotlin.reflect.typeOf
 
 class EnterActivity : AppCompatActivity() {
     private lateinit var sessionManager: SessionManager
-    // private lateinit var buttonGoToRegistration: Button
     private lateinit var userLogin: EditText
     private lateinit var userPassword: EditText
     private lateinit var textViewLinkGoToRegistration: TextView
@@ -38,12 +37,11 @@ class EnterActivity : AppCompatActivity() {
 
         sessionManager = SessionManager(this)
         val retrofit = Retrofit.Builder()
-            .baseUrl(resources.getString(R.string.my_ip))
+            .baseUrl(resources.getString(R.string.my_ip_home_network_2_4g))
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val authService = retrofit.create(AuthService::class.java)
 
-        Log.i("StatusSpec", R.string.my_ip.toString())
         textViewLinkGoToRegistration = findViewById(R.id.registrationTextView)
         val contentTextView = SpannableString("Sign up!").apply {  // Настройка TextView как ссылки
             setSpan(UnderlineSpan(), 0, length, 0)

@@ -1,0 +1,111 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/vacancyTitle"
+                style="@style/AuthTextViewStyle"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/likeButton"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textStyle="bold"
+                android:text="Product Designer" />
+
+            <TextView
+                android:id="@+id/companyName"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vacancyTitle"
+                app:layout_constraintEnd_toStartOf="@id/applicantsCount"
+                android:textSize="16sp"
+                android:text="MetaMask" />
+
+            <TextView
+                android:id="@+id/applicantsCount"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/companyName"
+                app:layout_constraintTop_toBottomOf="@id/vacancyTitle"
+                app:layout_constraintEnd_toStartOf="@id/likeButton"
+                android:textSize="14sp"
+                android:text="25 Applicants" />
+
+            <ImageView
+                android:id="@+id/likeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/search_button" /> <!-- Замените на вашу иконку лайка -->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/tagContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+            <!-- Теги будут добавлены программно -->
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/vacancyDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:maxLines="4"
+            android:ellipsize="end"
+            android:layout_marginTop="8dp"
+            android:text="Doing the right thing for investors is what we’re all about at Vanguard..." />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+<!--            android:justifyContent="space_between">-->
+
+            <TextView
+                android:id="@+id/salary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:textSize="14sp"
+                android:text="$250/hr" />
+
+            <TextView
+                android:id="@+id/postDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="textEnd"
+                android:textSize="12sp"
+                android:text="Posted 12 days ago" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
