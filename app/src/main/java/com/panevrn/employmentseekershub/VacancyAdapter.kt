@@ -61,8 +61,7 @@ class VacancyAdapter(
 
     inner class VacancyDiffCallback(
         private val oldList: List<Vacancy>,
-        private val newList: List<Vacancy>
-    ): DiffUtil.Callback() {
+        private val newList: List<Vacancy>): DiffUtil.Callback() {
         override fun getOldListSize(): Int = oldList.size
 
         override fun getNewListSize(): Int = newList.size
@@ -77,8 +76,10 @@ class VacancyAdapter(
 
     }
 
+
+    // Обновление списка для отрисовки, если добавится новая вакансия
     fun updateData(newVacancies: List<Vacancy>) {
-        val diffCallback = VacancyDiffCallback(vacancies, newVacancies)
+        val diffCallback = VacancyDiffCallback(oldList = vacancies, newList = newVacancies)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
         vacancies = newVacancies

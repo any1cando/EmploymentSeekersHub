@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
+import android.widget.Toast
 import com.panevrn.employmentseekershub.adapter.spinner.RegistrationPersonStatusAdapter
 import com.panevrn.employmentseekershub.model.dto.RegistrationPersonStatus
 import com.panevrn.employmentseekershub.model.dto.UserRegistrationRequest
@@ -21,7 +22,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.regex.Pattern
-import com.panevrn.employmentseekershub.SessionManager
 
 class RegistrationActivity : AppCompatActivity() {
     private lateinit var sessionManager: SessionManager
@@ -41,19 +41,20 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_registration)
+
+
         val retrofit = Retrofit.Builder()
             .baseUrl(resources.getString(R.string.my_ip_home_network_5g))
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val authService = retrofit.create(AuthService::class.java)
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_registration)
-
-        val registrationButton: Button = findViewById<Button>(R.id.confirmRegistrationButton)
-        val backToEnterButton: ImageButton =
-            findViewById<ImageButton>(R.id.backFromRegistrationToEnterButton)
+        val registrationButton: Button = findViewById(R.id.confirmRegistrationButton)
+        val backToEnterButton: ImageButton = findViewById(R.id.backFromRegistrationToEnterButton)
 
         // Установка адаптера на спиннер и его первоначальная настройка
+        spinner = findViewById(R.id.registrationSpinner)
         val spinnerRegistrationChoices = mutableListOf(
             RegistrationPersonStatus("Choose a role:"),
             RegistrationPersonStatus(resources.getString(R.string.part_of_a_team)),
@@ -65,14 +66,12 @@ class RegistrationActivity : AppCompatActivity() {
             spinnerRegistrationChoices
         )
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)  // Настроили прокрутку спиннера.
-        spinner = findViewById(R.id.registrationSpinner)
         spinner.adapter = adapterSpinner
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 if (!userHasInteracted) {
-                    // Если это вызов при инициализации, не предпринимаем действий
-                    return
+                    return // Если это вызов при инициализации, не предпринимаем действий
                 }
 
                 // Обновляем выбранный элемент и его запрос
@@ -87,7 +86,7 @@ class RegistrationActivity : AppCompatActivity() {
                 if (spinnerRegistrationChoices[0].status == "Choose a role:") {
                     spinnerRegistrationChoices.removeAt(0) // Удаляем заглушку
                     (parent.adapter as ArrayAdapter<*>).notifyDataSetChanged() // Обновляем адаптер
-                    spinner.setSelection(position - 1) // Устанавливаем выбранный элемент, учитывая удаление заглушки
+                    spinner.setSelection(position-1) // Устанавливаем выбранный элемент, учитывая удаление заглушки
                 }
             }
 
@@ -106,6 +105,10 @@ class RegistrationActivity : AppCompatActivity() {
                 userLogin.error = "Invalid email format"
             } else if (!isValidPassword(userPassword.text.toString().trim())) {
                 userPassword.error = "Password is weak"
+                Toast.makeText(
+                    this@RegistrationActivity,
+                    "Password must contain at least 1 little, 1 big, 1 number and special symbol",
+                    Toast.LENGTH_LONG).show()
             } else {
                 authRegistrationRequest(
                     authService,
@@ -115,12 +118,14 @@ class RegistrationActivity : AppCompatActivity() {
                     userPassword.text.toString().trim(),
                     userRoleRequest
                 )
+                Toast.makeText(this@RegistrationActivity, "Profile has been created!", Toast.LENGTH_SHORT).show()
             }
         }
 
         backToEnterButton.setOnClickListener {  // Обработчик при возвращении без регистрации
             val intentToEnter = Intent(this, EnterActivity::class.java)
             Log.i("Status:", "Вернулся без регистрации")
+            Toast.makeText(this@RegistrationActivity, "Coming to enter...", Toast.LENGTH_SHORT).show()
             startActivity(intentToEnter)
         }
 
@@ -162,28 +167,32 @@ class RegistrationActivity : AppCompatActivity() {
 
                         sessionManager.saveAccessToken(accessToken)
                         sessionManager.saveRefreshToken(refreshToken)
-                        // Используйте токен по своему усмотрению
+
                         val intentToMain = Intent(this@RegistrationActivity, EnterActivity::class.java)
-                        // !!!!!!Также добавить переход putExtra для двух токенов или SharedPreferences
+
                         startActivity(intentToMain)
                     } else {
                         when (response.code()) {
                             400 -> {
                                 val errorBodyRequest = response.errorBody()?.string()
+                                Log.i("Error 400", errorBodyRequest.toString())
+                                Toast.makeText(this@RegistrationActivity, "Error 400", Toast.LENGTH_SHORT).show()
                             }
 
                             else -> {
-                                val errorBodyServer = response.errorBody()?.string()  // ошибки 500
+                                val errorBodyServer = response.errorBody()?.string()
+                                Log.i("Error 500", errorBodyServer.toString())
+                                Toast.makeText(this@RegistrationActivity, "Error 500", Toast.LENGTH_SHORT).show()
                             }
                         }
-                        // Обработка ошибок, например, неправильные учетные данные
+                        // Обработка ошибок, например, неправильные учетные данныx ???
                     }
                 }
 
                 override fun onFailure(call: Call<UserTokenResponse>, t: Throwable) {
-                    val error: String = t.message.toString()
                     Log.i("Status:", "OnResponse's fail")
                     Log.i("Error:", t.message.toString())
+                    Toast.makeText(this@RegistrationActivity, "Something went wrong...", Toast.LENGTH_SHORT).show()
                 }
             })
     }

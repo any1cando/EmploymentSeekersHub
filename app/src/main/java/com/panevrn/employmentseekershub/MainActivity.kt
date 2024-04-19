@@ -1,20 +1,14 @@
 package com.panevrn.employmentseekershub
 
-import android.content.Intent
-import android.media.Image
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
-import com.panevrn.employmentseekershub.model.dto.UserTokenResponse
 import com.panevrn.employmentseekershub.model.dto.Vacancy
-import kotlinx.coroutines.handleCoroutineException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapterRecyclerView: VacancyAdapter
     private var testList: MutableList<Vacancy> = mutableListOf()
 
-    private lateinit var imageViewAccount: ImageView
+    private lateinit var imageViewAccount: ImageView  // ?? Чето придумать с иконкой и ее логикой в коде
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                 vacancyTitle = "Blockchain Engineer",
                 companyTitle = "Chainlink",
                 countCandidates = 10,
-                isLiked = false,
+                isLiked = true,
                 tags = listOf("Senior Level", "Part-Time"),
                 description = "Build decentralized networks.",
                 salary = "$350/hr",
@@ -90,6 +84,50 @@ class MainActivity : AppCompatActivity() {
                 companyTitle = "Uniswap",
                 countCandidates = 15,
                 isLiked = false,
+                tags = listOf("Entry Level", "Contract"),
+                description = "Conduct user research and tests.",
+                salary = "$150/hr",
+                postedTime = "2 weeks ago"
+            ),
+            Vacancy(
+                id = "1",
+                vacancyTitle = "Product Designer",
+                companyTitle = "MetaMask",
+                countCandidates = 25,
+                isLiked = false,
+                tags = listOf("Entry Level", "Full-Time"),
+                description = "Innovate and design new user experiences.",
+                salary = "$250/hr",
+                postedTime = "12 days ago"
+            ),
+            Vacancy(
+                id = "2",
+                vacancyTitle = "Frontend Developer",
+                companyTitle = "Decentraland",
+                countCandidates = 40,
+                isLiked = true,
+                tags = listOf("Mid-Level", "Full-Time", "Remote"),
+                description = "Develop cutting-edge web applications.",
+                salary = "$300/hr",
+                postedTime = "3 days ago"
+            ),
+            Vacancy(
+                id = "3",
+                vacancyTitle = "Blockchain Engineer",
+                companyTitle = "Chainlink",
+                countCandidates = 10,
+                isLiked = false,
+                tags = listOf("Senior Level", "Part-Time"),
+                description = "Build decentralized networks.",
+                salary = "$350/hr",
+                postedTime = "5 days ago"
+            ),
+            Vacancy(
+                id = "4",
+                vacancyTitle = "UX Researcher",
+                companyTitle = "Uniswap",
+                countCandidates = 15,
+                isLiked = true,
                 tags = listOf("Entry Level", "Contract"),
                 description = "Conduct user research and tests.",
                 salary = "$150/hr",

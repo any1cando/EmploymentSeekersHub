@@ -37,20 +37,17 @@ class EnterActivity : AppCompatActivity() {
             .build()
         val authService = retrofit.create(AuthService::class.java)
 
+        buttonGoToMain = findViewById(R.id.authorizationButton)
+        // Настройка TextView как ссылки
         textViewLinkGoToRegistration = findViewById(R.id.registrationTextView)
-        val contentTextView = SpannableString("Sign up!").apply {  // Настройка TextView как ссылки
+        val contentTextView = SpannableString("Sign up!").apply {
             setSpan(UnderlineSpan(), 0, length, 0)
         }
         textViewLinkGoToRegistration.text = contentTextView
 
-        // buttonGoToRegistration = findViewById(R.id.registrationButton)
-        buttonGoToMain = findViewById(R.id.authorizationButton)
-
-//        val login: String = findViewById<EditText>(R.id.loginEditText).text.toString()
-//        val password: String = findViewById<EditText>(R.id.passwordEditText).text.toString()
 
         textViewLinkGoToRegistration.setOnClickListener {  // Обработчик на переход к регистрации. Передаваемые поля - нет
-            Toast.makeText(this, "Coming to registration", Toast.LENGTH_SHORT).show()  // Вспылвающее предупреждение
+            Toast.makeText(this@EnterActivity, "Coming to registration", Toast.LENGTH_SHORT).show()  // Вспылвающее предупреждение
             val intentToRegistration = Intent(this, RegistrationActivity::class.java)
             startActivity(intentToRegistration)
         }
@@ -80,17 +77,20 @@ class EnterActivity : AppCompatActivity() {
 
                     sessionManager.saveAccessToken(accessToken)
                     sessionManager.saveRefreshToken(refreshToken)
-                    val intentToMain = Intent(this@EnterActivity, MainActivity::class.java)  // !!!!!!Также добавить переход putExtra для двух токенов или SharedPreferences
+                    Toast.makeText(this@EnterActivity, "Coming to main...", Toast.LENGTH_SHORT).show()
+                    val intentToMain = Intent(this@EnterActivity, MainActivity::class.java)
                     startActivity(intentToMain)
                 } else {
                     when (response.code()) {
                         400 -> {
                             val errorBodyRequest = response.errorBody()?.string()
                             Log.i("Error 400", errorBodyRequest.toString())
+                            Toast.makeText(this@EnterActivity, "Error 400", Toast.LENGTH_SHORT).show()
                         }
                         else -> {
                             val errorBodyServer = response.errorBody()?.string()  // ошибки 500
                             Log.i("Error 500", errorBodyServer.toString())
+                            Toast.makeText(this@EnterActivity, "Error 500", Toast.LENGTH_SHORT).show()
                         }
                     }
                     // Обработка ошибок, например, неправильные учетные данные
@@ -99,7 +99,8 @@ class EnterActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<UserTokenResponse>, t: Throwable) {
                 val error: String = t.message.toString()
-                Log.e("Error", error)
+                Log.e("Else error", error)
+                Toast.makeText(this@EnterActivity, "Something went wrong...", Toast.LENGTH_SHORT).show()
             }
         })
     }
