@@ -6,11 +6,8 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.util.Log
-import android.util.Patterns
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import com.panevrn.employmentseekershub.model.dto.UserAuthorizationRequest
@@ -20,8 +17,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.regex.Pattern
-import kotlin.reflect.typeOf
 
 class EnterActivity : AppCompatActivity() {
     private lateinit var sessionManager: SessionManager

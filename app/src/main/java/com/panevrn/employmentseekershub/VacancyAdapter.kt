@@ -17,12 +17,12 @@ class VacancyAdapter(
 
     class VacancyViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val vacancyTitle: TextView = view.findViewById(R.id.vacancyTitle)
-        val companyName: TextView = view.findViewById(R.id.companyName)
-        val applicantsCount: TextView = view.findViewById(R.id.applicantsCount)
-        val tagContainer: LinearLayout = view.findViewById(R.id.tagContainer)
-        val vacancyDescription: TextView = view.findViewById(R.id.vacancyDescription)
+        val companyTitle: TextView = view.findViewById(R.id.companyTitle)
+        val countCandidates: TextView = view.findViewById(R.id.countCandidates)
+        val tags: LinearLayout = view.findViewById(R.id.tags)
+        val description: TextView = view.findViewById(R.id.description)
         val salary: TextView = view.findViewById(R.id.salary)
-        val postDate: TextView = view.findViewById(R.id.postDate)
+        val postedTime: TextView = view.findViewById(R.id.postedTime)
         val likeButton: ImageView = view.findViewById(R.id.likeButton)
     }
 
@@ -33,21 +33,21 @@ class VacancyAdapter(
 
     override fun onBindViewHolder(holder: VacancyViewHolder, position: Int) {
         val vacancy = vacancies[position]
-        holder.companyName.text = vacancy.companyTitle
+        holder.companyTitle.text = vacancy.companyTitle
         holder.vacancyTitle.text = vacancy.vacancyTitle
-        holder.applicantsCount.text = "${vacancy.countCandidates} Applicants"
-        holder.vacancyDescription.text = vacancy.description
+        holder.countCandidates.text = "${vacancy.countCandidates} Applicants"
+        holder.description.text = vacancy.description
         holder.salary.text = vacancy.salary
-        holder.postDate.text = "Posted ${vacancy.postedTime}"
+        holder.postedTime.text = "Posted ${vacancy.postedTime}"
 
         val likeIcon = if (vacancy.isLiked) R.drawable.full_heart else R.drawable.empty_heart
         holder.likeButton.setImageResource(likeIcon)
 
-        holder.tagContainer.removeAllViews()
+        holder.tags.removeAllViews()
         vacancy.tags.forEach {tag ->
-            val tagView = LayoutInflater.from(holder.tagContainer.context).inflate(R.layout.tag_item, holder.tagContainer, false) as TextView
+            val tagView = LayoutInflater.from(holder.tags.context).inflate(R.layout.tag_item, holder.tags, false) as TextView
             tagView.text = tag
-            holder.tagContainer.addView(tagView)
+            holder.tags.addView(tagView)
         }
 
         holder.likeButton.setOnClickListener {

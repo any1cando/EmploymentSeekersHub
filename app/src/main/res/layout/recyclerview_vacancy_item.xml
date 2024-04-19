@@ -30,22 +30,22 @@
                 android:text="Product Designer" />
 
             <TextView
-                android:id="@+id/companyName"
+                android:id="@+id/companyTitle"
                 android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/vacancyTitle"
-                app:layout_constraintEnd_toStartOf="@id/applicantsCount"
+                app:layout_constraintEnd_toStartOf="@id/countCandidates"
                 android:textSize="16sp"
                 android:text="MetaMask" />
 
             <TextView
-                android:id="@+id/applicantsCount"
+                android:id="@+id/countCandidates"
                 android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/companyName"
+                app:layout_constraintStart_toEndOf="@id/companyTitle"
                 app:layout_constraintTop_toBottomOf="@id/vacancyTitle"
                 app:layout_constraintEnd_toStartOf="@id/likeButton"
                 android:textSize="14sp"
@@ -62,7 +62,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
-            android:id="@+id/tagContainer"
+            android:id="@+id/tags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -71,7 +71,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/vacancyDescription"
+            android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
@@ -97,7 +97,7 @@
                 android:text="$250/hr" />
 
             <TextView
-                android:id="@+id/postDate"
+                android:id="@+id/postedTime"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
