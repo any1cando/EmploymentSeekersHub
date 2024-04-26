@@ -1,26 +1,33 @@
 package com.panevrn.employmentseekershub
 
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.SearchView
+import android.widget.Toast
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.panevrn.employmentseekershub.model.dto.Vacancy
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.panevrn.employmentseekershub.model.dto.VacancyDto
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var sessionManager: SessionManager
     private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapterRecyclerView: VacancyAdapter
-    private var testList: MutableList<Vacancy> = mutableListOf()
+    private var testList: MutableList<VacancyDto> = mutableListOf()
+    private lateinit var apiClient: ApiClient
+    private lateinit var navController: NavController  // Для регулировки фрагментов
+    private lateinit var bottomNavigationView: BottomNavigationView
 
     private lateinit var imageViewAccount: ImageView  // ?? Чето придумать с иконкой и ее логикой в коде
 
@@ -28,135 +35,56 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        sessionManager = SessionManager(this)
-        val retrofit = Retrofit.Builder()
-            .baseUrl(resources.getString(R.string.my_ip_home_network_5g))
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val authService = retrofit.create(AuthService::class.java)
+//        navController = findNavController(R.id.nav_host_fragment)
+//        bottomNavigationView = findViewById(R.id.bottom_navigation)
+//        bottomNavigationView.setupWithNavController(navController)
 
-        authService.performHello(token = "Bearer ${sessionManager.fetchAccessToken()}").enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                Log.i("Status HelloCallback", response.body().toString())
+        sessionManager = SessionManager(this)
+        apiClient = ApiClient()
+        recyclerView = findViewById(R.id.mainRecyclerView)
+
+
+        apiClient.getVacancyService().getVacancies().enqueue(object: Callback<List<VacancyDto>> {
+            override fun onResponse(
+                call: Call<List<VacancyDto>>,
+                response: Response<List<VacancyDto>>
+            ) {
+                Log.i("Status:", "onResponse is working")
+                if (response.isSuccessful) {
+                    Log.i("Vacancies", response.body().toString())
+                    adapterRecyclerView = VacancyAdapter(response.body()) {vacancy ->
+                        handleLikeClicked(vacancy)
+                    }
+                    recyclerView.apply {
+                        layoutManager = LinearLayoutManager(this@MainActivity)
+                        adapter = adapterRecyclerView
+                    }
+                } else {
+                    when (response.code()) {
+                        400 -> {
+                            val errorBodyRequest = response.errorBody()?.string()
+                            Log.i("Error 400", errorBodyRequest.toString())
+                            Toast.makeText(this@MainActivity, "Error 400", Toast.LENGTH_SHORT).show()
+                        }
+                        else -> {
+                            val errorBodyServer = response.errorBody()?.string()  // ошибки 500
+                            Log.e("Error 500", response.message())
+                            Toast.makeText(this@MainActivity, "Error 500", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    // Обработка ошибок, например, неправильные учетные данные
+                }
             }
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                Log.e("Status HelloCallback", t.message.toString())
+
+            override fun onFailure(call: Call<List<VacancyDto>>, t: Throwable) {
+                TODO("Not yet implemented")
             }
 
         })
-        testList = mutableListOf(
-            Vacancy(
-                id = "1",
-                vacancyTitle = "Product Designer",
-                companyTitle = "MetaMask",
-                countCandidates = 25,
-                isLiked = false,
-                tags = listOf("Entry Level", "Full-Time"),
-                description = "Innovate and design new user experiences.",
-                salary = "$250/hr",
-                postedTime = "12 days ago"
-            ),
-            Vacancy(
-                id = "2",
-                vacancyTitle = "Frontend Developer",
-                companyTitle = "Decentraland",
-                countCandidates = 40,
-                isLiked = true,
-                tags = listOf("Mid-Level", "Full-Time", "Remote"),
-                description = "Develop cutting-edge web applications.",
-                salary = "$300/hr",
-                postedTime = "3 days ago"
-            ),
-            Vacancy(
-                id = "3",
-                vacancyTitle = "Blockchain Engineer",
-                companyTitle = "Chainlink",
-                countCandidates = 10,
-                isLiked = true,
-                tags = listOf("Senior Level", "Part-Time"),
-                description = "Build decentralized networks.",
-                salary = "$350/hr",
-                postedTime = "5 days ago"
-            ),
-            Vacancy(
-                id = "4",
-                vacancyTitle = "UX Researcher",
-                companyTitle = "Uniswap",
-                countCandidates = 15,
-                isLiked = false,
-                tags = listOf("Entry Level", "Contract"),
-                description = "Conduct user research and tests.",
-                salary = "$150/hr",
-                postedTime = "2 weeks ago"
-            ),
-            Vacancy(
-                id = "1",
-                vacancyTitle = "Product Designer",
-                companyTitle = "MetaMask",
-                countCandidates = 25,
-                isLiked = false,
-                tags = listOf("Entry Level", "Full-Time"),
-                description = "Innovate and design new user experiences.",
-                salary = "$250/hr",
-                postedTime = "12 days ago"
-            ),
-            Vacancy(
-                id = "2",
-                vacancyTitle = "Frontend Developer",
-                companyTitle = "Decentraland",
-                countCandidates = 40,
-                isLiked = true,
-                tags = listOf("Mid-Level", "Full-Time", "Remote"),
-                description = "Develop cutting-edge web applications.",
-                salary = "$300/hr",
-                postedTime = "3 days ago"
-            ),
-            Vacancy(
-                id = "3",
-                vacancyTitle = "Blockchain Engineer",
-                companyTitle = "Chainlink",
-                countCandidates = 10,
-                isLiked = false,
-                tags = listOf("Senior Level", "Part-Time"),
-                description = "Build decentralized networks.",
-                salary = "$350/hr",
-                postedTime = "5 days ago"
-            ),
-            Vacancy(
-                id = "4",
-                vacancyTitle = "UX Researcher",
-                companyTitle = "Uniswap",
-                countCandidates = 15,
-                isLiked = true,
-                tags = listOf("Entry Level", "Contract"),
-                description = "Conduct user research and tests.",
-                salary = "$150/hr",
-                postedTime = "2 weeks ago"
-            )
-        )
 
         // Супер затычка на чек адаптера
-        fun handleLikeClicked(vacancy: Vacancy) {
-            // Изменить состояние лайка в модели данных
-            val index = testList.indexOf(vacancy)
-            if (index != -1) {
-                testList[index].isLiked = !testList[index].isLiked
-                // Обновление элемента в RecyclerView
-                adapterRecyclerView.notifyItemChanged(index)
-            }
 
-            // TODO: Отправить изменение состояния лайка на сервер или в базу данных
-        }
-        adapterRecyclerView = VacancyAdapter(testList) {vacancy ->
-            handleLikeClicked(vacancy)
-        }
-        recyclerView = findViewById(R.id.mainRecyclerView)
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = adapterRecyclerView
-        }
-
-        imageViewAccount = findViewById<ImageView>(R.id.imageViewAvatarMain)
+        imageViewAccount = findViewById(R.id.imageViewAvatarMain)
         imageViewAccount.setImageResource(R.drawable.account_icon_default)  // Установка базовой картинки на профиль
 
         // Определение SearchView, настройка внешнего вида в виде функции, слушатель для поисковика
@@ -196,6 +124,18 @@ class MainActivity : AppCompatActivity() {
             vacancy.vacancyTitle.contains(query, ignoreCase = true)
         }
         (recyclerView.adapter as VacancyAdapter).updateData(filtredList)
+    }
+
+    private fun handleLikeClicked(vacancy: VacancyDto) {
+        // Изменить состояние лайка в модели данных
+        val index = testList.indexOf(vacancy)
+        if (index != -1) {
+            testList[index].isLiked = !testList[index].isLiked
+            // Обновление элемента в RecyclerView
+            adapterRecyclerView.notifyItemChanged(index)
+        }
+
+        // TODO: Отправить изменение состояния лайка на сервер или в базу данных
     }
 
 }

@@ -10,12 +10,12 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface AuthService {
-    @POST("auth/login")  // Строка для ввода адреса
+    @POST("v1/auth/login")  // Строка для ввода адреса
     fun performLogin(@Body loginInfo: UserAuthorizationRequest): Call<UserTokenResponse>  // Метод для выполнения запроса на сервер (передача логин/пароль)
 
-    @POST("auth/registration")  // Строка для ввода регистрации
+    @POST("v1/auth/registration")  // Строка для ввода регистрации
     fun performRegistration(@Body registrationInfo: UserRegistrationRequest): Call<UserTokenResponse>
 
-    @GET("greet/hello")
+    @GET("v1/greet/hello")
     fun performHello(@Header("Authorization") token: String): Call<String>
 }

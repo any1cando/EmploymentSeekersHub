@@ -8,11 +8,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.panevrn.employmentseekershub.model.dto.Vacancy
+import com.panevrn.employmentseekershub.model.dto.VacancyDto
 
 class VacancyAdapter(
-    private var vacancies: List<Vacancy>,
-    private val onLikeClicked: (Vacancy) -> Unit  // ???
+    private var vacancies: List<VacancyDto>?,
+    private val onLikeClicked: (VacancyDto) -> Unit  // ???
 ): RecyclerView.Adapter<VacancyAdapter.VacancyViewHolder>() {
 
     class VacancyViewHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -32,12 +32,12 @@ class VacancyAdapter(
     }
 
     override fun onBindViewHolder(holder: VacancyViewHolder, position: Int) {
-        val vacancy = vacancies[position]
+        val vacancy = vacancies!![position]
         holder.companyTitle.text = vacancy.companyTitle
         holder.vacancyTitle.text = vacancy.vacancyTitle
         holder.countCandidates.text = "${vacancy.countCandidates} Applicants"
         holder.description.text = vacancy.description
-        holder.salary.text = vacancy.salary
+        holder.salary.text = vacancy.salary.amount.toString()
         holder.postedTime.text = "Posted ${vacancy.postedTime}"
 
         val likeIcon = if (vacancy.isLiked) R.drawable.full_heart else R.drawable.empty_heart
@@ -56,12 +56,12 @@ class VacancyAdapter(
         }
     }
 
-    override fun getItemCount(): Int = vacancies.size
+    override fun getItemCount(): Int = vacancies!!.size
 
 
     inner class VacancyDiffCallback(
-        private val oldList: List<Vacancy>,
-        private val newList: List<Vacancy>): DiffUtil.Callback() {
+        private val oldList: List<VacancyDto>,
+        private val newList: List<VacancyDto>): DiffUtil.Callback() {
         override fun getOldListSize(): Int = oldList.size
 
         override fun getNewListSize(): Int = newList.size
@@ -78,8 +78,8 @@ class VacancyAdapter(
 
 
     // Обновление списка для отрисовки, если добавится новая вакансия
-    fun updateData(newVacancies: List<Vacancy>) {
-        val diffCallback = VacancyDiffCallback(oldList = vacancies, newList = newVacancies)
+    fun updateData(newVacancies: List<VacancyDto>) {
+        val diffCallback = VacancyDiffCallback(oldList = vacancies!!, newList = newVacancies)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
         vacancies = newVacancies

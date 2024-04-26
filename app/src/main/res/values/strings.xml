@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">EmploymentSeekersHub</string>
-    <string name="my_ip_mobile_network">http://172.20.10.2:8081/api/</string>
-    <string name="my_ip_home_network_5g">http://192.168.1.75:8081/api/</string>
-    <string name="my_ip_home_network_2_4g">http://192.168.1.64:8081/api/</string>
+    <string name="my_ip_mobile_network">http://172.20.10.2:8081/api</string>
+    <string name="my_ip_home_network_5g">http://192.168.1.75:8081/api</string>
+    <string name="my_ip_home_network_2_4g">http://192.168.1.64:8081/api</string>
 <!--    http://192.168.56.1:8081/api-->
     <string name="welcome_back">Welcome back!</string>
     <string name="your_email">Your Email</string>
@@ -19,4 +19,7 @@
     <string name="solo_creator">Solo Creator</string>
     <string name="choose_prompt">Choose…</string>
     <string name="search_const">Start here…</string>
+    <string name="tunes">Filters</string>
+    <string name="local_tunes">Local Filters</string>
+    <string name="profile">Profile</string>
 </resources>

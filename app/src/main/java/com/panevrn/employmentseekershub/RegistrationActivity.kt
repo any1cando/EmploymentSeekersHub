@@ -32,7 +32,7 @@ class RegistrationActivity : AppCompatActivity() {
     private lateinit var userLogin: EditText
     private lateinit var userPassword: EditText
     private lateinit var spinner: Spinner
-
+    private lateinit var apiClient: ApiClient
     private var userHasInteracted = false
 
     override fun onUserInteraction() {
@@ -44,12 +44,8 @@ class RegistrationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registration)
 
+        apiClient = ApiClient()
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl(resources.getString(R.string.my_ip_home_network_5g))
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val authService = retrofit.create(AuthService::class.java)
         val registrationButton: Button = findViewById(R.id.confirmRegistrationButton)
         val backToEnterButton: ImageButton = findViewById(R.id.backFromRegistrationToEnterButton)
 
@@ -111,7 +107,7 @@ class RegistrationActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG).show()
             } else {
                 authRegistrationRequest(
-                    authService,
+                    apiClient.getAuthService(),
                     firstName.text.toString().trim(),
                     lastName.text.toString().trim(),
                     userLogin.text.toString().trim(),
@@ -185,7 +181,6 @@ class RegistrationActivity : AppCompatActivity() {
                                 Toast.makeText(this@RegistrationActivity, "Error 500", Toast.LENGTH_SHORT).show()
                             }
                         }
-                        // Обработка ошибок, например, неправильные учетные данныx ???
                     }
                 }
 

@@ -1,0 +1,19 @@
+<!-- res/navigation/nav_graph.xml -->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph">
+
+    <!-- Определите фрагменты и потенциальные действия между ними здесь -->
+    <fragment
+        android:id="@+id/filtersFragment"
+        android:name="com.panevrn.employmentseekershub.fragmentsMain.FiltersFragment"
+        android:label="@string/tunes" />
+    <fragment
+        android:id="@+id/localFiltersFragment"
+        android:name="com.panevrn.employmentseekershub.fragmentsMain.LocalFiltersFragment"
+        android:label="@string/local_tunes" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.panevrn.employmentseekershub.fragmentsMain.ProfileFragment"
+        android:label="@string/profile" />
+</navigation>

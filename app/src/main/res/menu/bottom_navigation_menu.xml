@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_tunes"
+        android:icon="@drawable/tune_icon"
+        android:title="@string/tunes" /> <!-- замените на вашу иконку -->
+    <item
+        android:id="@+id/navigation_local_tunes"
+        android:icon="@drawable/local_tune_icon"
+        android:title="@string/local_tunes" /> <!-- замените на вашу иконку -->
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/account_circle_icon"
+        android:title="@string/profile" /> <!-- замените на вашу иконку -->
+
+
+</menu>

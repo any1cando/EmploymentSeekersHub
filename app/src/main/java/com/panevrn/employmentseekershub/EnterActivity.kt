@@ -24,6 +24,7 @@ class EnterActivity : AppCompatActivity() {
     private lateinit var userPassword: EditText
     private lateinit var textViewLinkGoToRegistration: TextView
     private lateinit var buttonGoToMain: Button
+    private lateinit var apiClient: ApiClient
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,11 +32,7 @@ class EnterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_enter)
 
         sessionManager = SessionManager(this)
-        val retrofit = Retrofit.Builder()
-            .baseUrl(resources.getString(R.string.my_ip_home_network_2_4g))
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val authService = retrofit.create(AuthService::class.java)
+        apiClient = ApiClient()
 
         buttonGoToMain = findViewById(R.id.authorizationButton)
         // Настройка TextView как ссылки
@@ -55,7 +52,7 @@ class EnterActivity : AppCompatActivity() {
         buttonGoToMain.setOnClickListener {  // Обработчик на авторизацию аккаунта. Передаваемые поля - логин(email) и пароль.
             userLogin = findViewById(R.id.loginEditText)
             userPassword = findViewById(R.id.passwordEditText)
-            authLoginRequest(authService, userLogin.text.toString().trim(), userPassword.text.toString().trim())
+            authLoginRequest(apiClient.getAuthService(), userLogin.text.toString().trim(), userPassword.text.toString().trim())
         }
 
     }
@@ -89,7 +86,7 @@ class EnterActivity : AppCompatActivity() {
                         }
                         else -> {
                             val errorBodyServer = response.errorBody()?.string()  // ошибки 500
-                            Log.i("Error 500", errorBodyServer.toString())
+                            Log.e("Error 500", response.message())
                             Toast.makeText(this@EnterActivity, "Error 500", Toast.LENGTH_SHORT).show()
                         }
                     }
