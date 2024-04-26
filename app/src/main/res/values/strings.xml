@@ -22,4 +22,6 @@
     <string name="tunes">Filters</string>
     <string name="local_tunes">Local Filters</string>
     <string name="profile">Profile</string>
+    <string name="avatar">avatar</string>
+    <string name="main">Main</string>
 </resources>

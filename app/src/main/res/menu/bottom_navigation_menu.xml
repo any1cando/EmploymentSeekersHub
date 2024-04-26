@@ -13,5 +13,10 @@
         android:icon="@drawable/account_circle_icon"
         android:title="@string/profile" /> <!-- замените на вашу иконку -->
 
+    <item
+        android:id="@+id/navigation_recycler"
+        android:icon="@drawable/recycler_main_icon"
+        android:title="@string/main" />
+
 
 </menu>
