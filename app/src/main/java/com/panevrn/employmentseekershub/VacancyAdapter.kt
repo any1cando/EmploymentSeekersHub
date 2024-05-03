@@ -43,11 +43,21 @@ class VacancyAdapter(
         val likeIcon = if (vacancy.isLiked) R.drawable.full_heart else R.drawable.empty_heart
         holder.likeButton.setImageResource(likeIcon)
 
+        val maxTagsToShow = 3  // Ограничение по тегам
         holder.tags.removeAllViews()
-        vacancy.tags.forEach {tag ->
+
+        // Отрисовываем теги с ограничением по количеству - 3 штуки
+        vacancy.tags.take(maxTagsToShow).forEach { tag ->
             val tagView = LayoutInflater.from(holder.tags.context).inflate(R.layout.tag_item, holder.tags, false) as TextView
             tagView.text = tag
             holder.tags.addView(tagView)
+        }
+
+        // Проверяем: если тегов больше, чем максимальное количество, то добавляем '...' четвертым тегом
+        if (vacancy.tags.size > maxTagsToShow) {
+            val moreTagsView = LayoutInflater.from(holder.tags.context).inflate(R.layout.tag_item, holder.tags, false) as TextView
+            moreTagsView.text = "..."
+            holder.tags.addView(moreTagsView)
         }
 
         holder.likeButton.setOnClickListener {
