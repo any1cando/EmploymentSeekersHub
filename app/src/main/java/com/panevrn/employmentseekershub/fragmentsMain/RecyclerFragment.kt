@@ -1,5 +1,6 @@
 package com.panevrn.employmentseekershub.fragmentsMain
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,9 +13,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.panevrn.employmentseekershub.ApiClient
+import com.panevrn.employmentseekershub.MainActivity
 import com.panevrn.employmentseekershub.R
 import com.panevrn.employmentseekershub.SessionManager
 import com.panevrn.employmentseekershub.VacancyAdapter
+import com.panevrn.employmentseekershub.VacancyDetailed
 import com.panevrn.employmentseekershub.model.dto.VacancyDto
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,7 +28,7 @@ class RecyclerFragment: Fragment() {
     private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapterRecyclerView: VacancyAdapter
-    private var testList: MutableList<VacancyDto> = mutableListOf()
+    private lateinit var vacanciesList: List<VacancyDto>
     private lateinit var apiClient: ApiClient
     private lateinit var imageViewAccount: ImageView  // ?? Чето придумать с иконкой и ее логикой в коде
 
@@ -53,10 +56,17 @@ class RecyclerFragment: Fragment() {
             ) {
                 Log.i("Status:", "onResponse is working")
                 if (response.isSuccessful) {
+                    vacanciesList = response.body()!!
                     Log.i("Vacancies", response.body().toString())
-                    adapterRecyclerView = VacancyAdapter(response.body()) {vacancy ->
-                        handleLikeClicked(vacancy)
-                    }
+                    adapterRecyclerView = VacancyAdapter(
+                        vacanciesList,
+                        { vacancy -> handleLikeClicked(vacancy) },
+                        { vacancy ->
+                            val intent = Intent(view.context, VacancyDetailed::class.java)
+                            intent.putExtra("vacancy_id", vacancy.id)
+                            startActivity(intent)
+                        }
+                    )
                     recyclerView.apply {
                         layoutManager = LinearLayoutManager(requireContext())
                         adapter = adapterRecyclerView
@@ -119,7 +129,7 @@ class RecyclerFragment: Fragment() {
 
     // Функция, которая используется в слушателе поисковика
     private fun searchForJob(query: String) {
-        val filtredList = testList.filter { vacancy ->
+        val filtredList = vacanciesList.filter { vacancy ->
             vacancy.vacancyTitle.contains(query, ignoreCase = true)
         }
         (recyclerView.adapter as? VacancyAdapter)?.updateData(filtredList)
@@ -127,11 +137,10 @@ class RecyclerFragment: Fragment() {
 
     private fun handleLikeClicked(vacancy: VacancyDto) {
         // Изменить состояние лайка в модели данных
-        val index = testList.indexOf(vacancy)
+        val index = vacanciesList.indexOf(vacancy)  // Используйте актуальный список адаптера
         if (index != -1) {
-            testList[index].isLiked = !testList[index].isLiked
-            // Обновление элемента в RecyclerView
-            adapterRecyclerView.notifyItemChanged(index)
+            vacanciesList[index].isLiked = !vacanciesList[index].isLiked
+            adapterRecyclerView.notifyItemChanged(index)  // Обновляем конкретный элемент
         }
 
         // TODO: Отправить изменение состояния лайка на сервер или в базу данных
