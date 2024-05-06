@@ -11,7 +11,7 @@ class VacancyDetailed : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vacancy_detailed)
 
-
+        val vacancyId = intent.getStringExtra("vacancy_id")
 
     }
 }
