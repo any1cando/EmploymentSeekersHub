@@ -31,6 +31,7 @@ class RecyclerFragment: Fragment() {
     private lateinit var vacanciesList: List<VacancyDto>
     private lateinit var apiClient: ApiClient
     private lateinit var imageViewAccount: ImageView  // ?? Чето придумать с иконкой и ее логикой в коде
+    private var lastScrollPosition = 0  // Объявление переменной на уровне класса
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -113,6 +114,19 @@ class RecyclerFragment: Fragment() {
 
     }
 
+
+    override fun onPause() {
+        super.onPause()
+        // Сохранение состояния
+        lastScrollPosition = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        recyclerView.post {
+            recyclerView.layoutManager?.scrollToPosition(lastScrollPosition)
+        }
+    }
 
 
     // Функция, которая вызывается всегда при начале программы, чтобы изменить параметры searchView.
