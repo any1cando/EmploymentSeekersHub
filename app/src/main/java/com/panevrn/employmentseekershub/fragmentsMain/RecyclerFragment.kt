@@ -1,5 +1,6 @@
 package com.panevrn.employmentseekershub.fragmentsMain
 
+import FilterBottomSheetDialogFragment
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -24,6 +25,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class RecyclerFragment: Fragment() {
+    private var filterFragment = FilterBottomSheetDialogFragment()
     private lateinit var sessionManager: SessionManager
     private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
@@ -95,7 +97,10 @@ class RecyclerFragment: Fragment() {
         })
 
         imageViewAccount = view.findViewById(R.id.imageViewAvatarMain)
-        imageViewAccount.setImageResource(R.drawable.account_icon_default)
+        imageViewAccount.setOnClickListener {
+            filterFragment.show(childFragmentManager, filterFragment.tag)
+        }
+
 
         searchView = view.findViewById(R.id.searchViewMain)
         changeSearchView(searchView)
