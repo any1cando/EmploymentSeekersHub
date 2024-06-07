@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
 import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.Toast
@@ -19,20 +20,24 @@ import com.panevrn.employmentseekershub.R
 import com.panevrn.employmentseekershub.SessionManager
 import com.panevrn.employmentseekershub.VacancyAdapter
 import com.panevrn.employmentseekershub.VacancyDetailed
+import com.panevrn.employmentseekershub.model.dto.FilterData
+import com.panevrn.employmentseekershub.model.dto.FiltersDto
 import com.panevrn.employmentseekershub.model.dto.VacancyDto
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Objects
 
 class RecyclerFragment: Fragment() {
     private var filterFragment = FilterBottomSheetDialogFragment()
     private lateinit var sessionManager: SessionManager
+    private var filterObject: FiltersDto? = null
     private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapterRecyclerView: VacancyAdapter
-    private lateinit var vacanciesList: List<VacancyDto>
+    private var vacanciesList: List<VacancyDto> = emptyList()
     private lateinit var apiClient: ApiClient
-    private lateinit var imageViewAccount: ImageView  // ?? Чето придумать с иконкой и ее логикой в коде
+    private lateinit var imageViewFilters: ImageView  // ?? Чето придумать с иконкой и ее логикой в коде
     private var lastScrollPosition = 0  // Объявление переменной на уровне класса
 
     override fun onCreateView(
@@ -48,6 +53,7 @@ class RecyclerFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         sessionManager = SessionManager(requireContext())  // requireContext - фича фрагмента, чтобы получить контекст
+        val accessToken = sessionManager.fetchAccessToken()
         apiClient = ApiClient()
         recyclerView = view.findViewById(R.id.mainRecyclerView)
 
@@ -96,9 +102,34 @@ class RecyclerFragment: Fragment() {
 
         })
 
-        imageViewAccount = view.findViewById(R.id.imageViewAvatarMain)
-        imageViewAccount.setOnClickListener {
-            filterFragment.show(childFragmentManager, filterFragment.tag)
+        imageViewFilters = view.findViewById(R.id.imageViewFilters)
+        imageViewFilters.setOnClickListener {
+            getFilters(apiClient, accessToken!!,
+                onSuccess = { filtersList ->
+                    filtersList?.forEach { groupFilter ->
+                        var titleGroup = groupFilter.title
+                        groupFilter.filters.forEach { jsonFilter ->
+                            when (val data = jsonFilter.data) {
+                                is FilterData.CheckBoxOptions -> {
+                                    // Запускаю функцию по отрисовке фильтра чекбокса
+                                    Log.i("Response Filters", "Checkbox options: ${data.options}")
+                                }
+                                is FilterData.Range -> {
+                                    // Запускаю функцию по отрисовке фильтра диапазона
+                                    Log.i("Response Filters", "Range: from ${data.from} to ${data.to}")
+                                }
+
+                            }
+
+                        }
+                        Log.i("Response Filters", groupFilter.filters.toString())
+                    }
+                    filterObject = filtersList?.firstOrNull()
+                    filterFragment.show(childFragmentManager, filterFragment.tag)
+                },
+                onError = { error ->
+                    Toast.makeText(requireContext(), error.message.toString(), Toast.LENGTH_SHORT).show()
+                })
         }
 
 
@@ -148,10 +179,12 @@ class RecyclerFragment: Fragment() {
 
     // Функция, которая используется в слушателе поисковика
     private fun searchForJob(query: String) {
-        val filtredList = vacanciesList.filter { vacancy ->
-            vacancy.vacancyTitle.contains(query, ignoreCase = true)
+        if (vacanciesList.isNotEmpty()) {
+            val filtredList = vacanciesList.filter { vacancy ->
+                vacancy.vacancyTitle.contains(query, ignoreCase = true)
         }
-        (recyclerView.adapter as? VacancyAdapter)?.updateData(filtredList)
+            (recyclerView.adapter as? VacancyAdapter)?.updateData(filtredList)
+        }
     }
 
     private fun handleLikeClicked(vacancy: VacancyDto) {
@@ -163,5 +196,30 @@ class RecyclerFragment: Fragment() {
         }
 
         // TODO: Отправить изменение состояния лайка на сервер или в базу данных
+    }
+
+
+    private fun getFilters(apiClient: ApiClient, token: String, onSuccess: (List<FiltersDto>?) -> Unit, onError: (Throwable) -> Unit) {
+        apiClient.getVacancyService().getFilters("Bearer $token").enqueue(object: Callback<List<FiltersDto>> {
+            override fun onResponse(call: Call<List<FiltersDto>>, response: Response<List<FiltersDto>>) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        onSuccess(it)
+                    }
+                } else {
+                    val errorMessage = "Failed to load filters: ${response.errorBody()?.string() ?: "Unknown error"}"
+                    Log.e("Error Filters", errorMessage)
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                    onError(RuntimeException(errorMessage))
+                }
+            }
+
+            override fun onFailure(call: Call<List<FiltersDto>>, t: Throwable) {
+                Log.e("Error Filters", "Network error: ${t.message}", t)
+                Toast.makeText(requireContext(), "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                onError(t)
+            }
+
+        })
     }
 }

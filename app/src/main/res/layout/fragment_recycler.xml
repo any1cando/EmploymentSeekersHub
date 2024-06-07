@@ -30,7 +30,7 @@
             />
 
         <ImageView
-            android:id="@+id/imageViewAvatarMain"
+            android:id="@+id/imageViewFilters"
             android:layout_width="48dp"
             android:layout_height="match_parent"
 

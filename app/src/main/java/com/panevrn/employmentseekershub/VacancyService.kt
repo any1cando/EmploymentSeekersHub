@@ -1,5 +1,6 @@
 package com.panevrn.employmentseekershub
 
+import com.panevrn.employmentseekershub.model.dto.FiltersDto
 import com.panevrn.employmentseekershub.model.dto.VacancyDto
 import retrofit2.Call
 import retrofit2.http.Body
@@ -14,5 +15,9 @@ interface VacancyService {
 
     @GET("v1/vacancies/{vacancyId}")
     fun getVacancyById(@Path("vacancyId") id: String, @Header("Authorization") token: String): Call<VacancyDto>
+
+
+    @GET("v1/vacancies/filters")
+    fun getFilters(@Header("Authorization") token: String): Call<List<FiltersDto>>
 
 }
